@@ -35,8 +35,15 @@
   },
   "homepage": "https://github.com/adonisjs/route-model-binding#readme",
   "devDependencies": {
+    "@adonisjs/core": "^5.8.3",
+    "@adonisjs/lucid": "^18.0.0",
     "@adonisjs/mrm-preset": "^5.0.3",
     "@adonisjs/require-ts": "^2.0.12",
+    "@japa/assert": "^1.3.4",
+    "@japa/run-failed-tests": "^1.0.7",
+    "@japa/runner": "^2.0.8",
+    "@japa/spec-reporter": "^1.1.12",
+    "@poppinss/dev-utils": "^2.0.3",
     "@types/node": "^17.0.35",
     "commitizen": "^4.2.4",
     "cz-conventional-changelog": "^3.3.0",
@@ -50,6 +57,8 @@
     "mrm": "^4.0.0",
     "np": "^7.6.1",
     "prettier": "^2.6.2",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.8",
     "typescript": "^4.7.2"
   },
   "mrmConfig": {
@@ -108,5 +117,8 @@
   "np": {
     "contents": ".",
     "anyBranch": false
+  },
+  "dependencies": {
+    "@poppinss/utils": "^4.0.4"
   }
 }
