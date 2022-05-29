@@ -8,3 +8,4 @@
  */
 
 /// <reference path="./http-context.ts" />
+/// <reference path="./rmb.ts" />
