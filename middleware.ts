@@ -7,4 +7,5 @@
  * file that was distributed with this source code.
  */
 
-export { bind } from './src/decorators/bind'
+import { RouteModelBindingMiddleware } from './src/middleware/route_model_binding'
+export default RouteModelBindingMiddleware
