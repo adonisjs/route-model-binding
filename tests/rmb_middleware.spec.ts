@@ -89,6 +89,74 @@ test.group('Route model binding | middleware', (group) => {
     await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
   })
 
+  test('load resources with a custom route param', async ({ assert }) => {
+    const app = await setup()
+    await migrate(app.container.resolveBinding('Adonis/Lucid/Database'))
+
+    const { BaseModel, column, hasMany } = app.container.resolveBinding('Adonis/Lucid/Orm')
+
+    class Post extends BaseModel {
+      @column({ isPrimary: true })
+      public id: number
+
+      @column()
+      public title: string
+
+      @column()
+      public slug: string
+
+      @hasMany(() => Comment)
+      public comments: HasMany<typeof Comment>
+    }
+
+    class Comment extends BaseModel {
+      @column({ isPrimary: true })
+      public id: number
+
+      @column()
+      public postId: number
+
+      @column()
+      public title: string
+
+      @column()
+      public slug: string
+    }
+
+    class PostsController {
+      @bind()
+      public show(_, __: Post) {}
+    }
+
+    await Post.createMany([
+      {
+        title: 'Hello world',
+        slug: 'hello-world',
+      },
+      {
+        title: 'Hello AdonisJS',
+        slug: 'hello-adonisjs',
+      },
+    ])
+
+    const ctx = getContextForRoute(app, 'posts/:post(slug)', 'posts/hello-adonisjs')
+    ctx.route!.meta.resolvedHandler = {
+      type: 'binding',
+      namespace: 'PostsController',
+      method: 'show',
+    }
+
+    app.container.bind('PostsController', () => PostsController)
+    await new RouteModelBindingMiddleware(app).handle(ctx, async () => {
+      assert.property(ctx.resources, 'post')
+      assert.instanceOf(ctx.resources.post, Post)
+      assert.equal(ctx.resources.post.id, 2)
+      assert.equal(ctx.resources.post.slug, 'hello-adonisjs')
+    })
+
+    await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
+  })
+
   test("do not load resources when controller isn't using the bind decorator", async ({
     assert,
   }) => {

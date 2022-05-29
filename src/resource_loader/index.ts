@@ -157,7 +157,14 @@ export class ResourceLoader {
    */
   public async load(models: (RouteModel | null)[]) {
     let index = 0
-    const routeParams = new ParamsParser(this.ctx.route!.params, this.ctx.route!.pattern).parse()
+    if (!this.ctx.route!.meta.resolvedParams) {
+      this.ctx.route!.meta.resolvedParams = new ParamsParser(
+        this.ctx.route!.params,
+        this.ctx.route!.pattern
+      ).parse()
+    }
+
+    const routeParams = this.ctx.route!.meta.resolvedParams as Param[]
 
     /**
      * Loading models one by one, since some models can be scoped to the

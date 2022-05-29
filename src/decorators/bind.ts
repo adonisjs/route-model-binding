@@ -8,6 +8,7 @@
  */
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
 import { RouteModel } from '../contracts'
 import { InvalidBindValueException } from '../exceptions/invalid_bind_value'
 
@@ -48,8 +49,8 @@ export function bind(models?: (RouteModel | null)[]) {
           return bindings.reduce(
             (result: any[], binding: any, index: number) => {
               if (binding !== null) {
-                const paramAtIndex = ctx.route!.params[index]
-                result.push(ctx.resources[paramAtIndex])
+                const param = ctx.route!.meta.resolvedParams[index]
+                result.push(ctx.resources[param.name])
               }
               return result
             },
