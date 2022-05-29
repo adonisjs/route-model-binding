@@ -5,10 +5,9 @@
   "files": [
     "build/adonis-typings",
     "build/src",
+    "build/providers",
     "build/index.d.ts",
-    "build/index.js",
-    "build/middleware.d.ts",
-    "build/middleware.js"
+    "build/index.js"
   ],
   "main": "build/index.js",
   "types": "build/adonis-typings/index.d.ts",

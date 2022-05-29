@@ -8,13 +8,11 @@
  */
 
 import { esmResolver } from '@poppinss/utils'
-import { inject } from '@adonisjs/core/build/standalone'
 import type { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { ResourceLoader } from '../resource_loader'
 
-@inject(['Adonis/Core/Application'])
 export class RouteModelBindingMiddleware {
   constructor(private application: ApplicationContract) {}
 
