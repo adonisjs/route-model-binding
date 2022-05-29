@@ -1,7 +1,9 @@
+import 'reflect-metadata'
 import { assert } from '@japa/assert'
 import { specReporter } from '@japa/spec-reporter'
 import { runFailedTests } from '@japa/run-failed-tests'
 import { processCliArgs, configure, run } from '@japa/runner'
+import { apiClient } from '@japa/api-client'
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,7 @@ configure({
   ...processCliArgs(process.argv.slice(2)),
   ...{
     files: ['tests/**/*.spec.ts'],
-    plugins: [assert(), runFailedTests()],
+    plugins: [assert(), runFailedTests(), apiClient()],
     reporters: [specReporter()],
     importer: (filePath) => import(filePath),
     forceExit: true,

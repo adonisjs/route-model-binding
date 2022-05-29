@@ -7,4 +7,8 @@
  * file that was distributed with this source code.
  */
 
-/// <reference path="./http-context.ts" />
+declare module '@ioc:Adonis/Core/HttpContext' {
+  interface HttpContextContract {
+    resources: Record<string, any>
+  }
+}

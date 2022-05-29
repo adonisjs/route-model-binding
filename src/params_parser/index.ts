@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { Param } from '../../adonis-typings'
+import { Param } from '../contracts'
 
 /**
  * Parses the params on a route. The params parser should not rely on the

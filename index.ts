@@ -7,4 +7,5 @@
  * file that was distributed with this source code.
  */
 
-/// <reference path="./http-context.ts" />
+export { RouteModelBindingMiddleware } from './src/middleware/route_model_binding'
+export { bind } from './src/decorators/bind'

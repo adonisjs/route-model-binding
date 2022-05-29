@@ -7,4 +7,12 @@
  * file that was distributed with this source code.
  */
 
-/// <reference path="./http-context.ts" />
+import 'reflect-metadata'
+import { bind } from '../src/decorators/bind'
+
+class User {}
+
+export class UsersController {
+  @bind()
+  public show(_, __: User) {}
+}

@@ -12,7 +12,8 @@ import { LucidModel, LucidRow } from '@ioc:Adonis/Lucid/Orm'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import { ParamsParser } from '../params_parser'
-import { Param, RouteModel } from '../../adonis-typings'
+import { Param, RouteModel } from '../contracts'
+import { MissingRelationshipException } from '../exceptions/missing_relationship'
 
 /**
  * Resource loader job is to query the Lucid models for the given
@@ -66,11 +67,7 @@ export class ResourceLoader {
       return relationshipName
     }
 
-    throw new Error(
-      `Cannot load "${param.name}" for route "${
-        this.ctx.route!.pattern
-      }". Make sure to define it as a relationship on model "${parentModel.name}"`
-    )
+    throw MissingRelationshipException.invoke(param.name, this.ctx.route!.pattern, parentModel.name)
   }
 
   /**

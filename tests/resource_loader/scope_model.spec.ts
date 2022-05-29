@@ -361,7 +361,7 @@ test.group('Resource Loader | Scoped', (group) => {
     const loader = new ResourceLoader(ctx)
     await assert.rejects(
       () => loader.load([Post, Comment]),
-      'Cannot load "comment" for route "/posts/:post/comments/:>comment". Make sure to define it as a relationship on model "Post"'
+      'E_MISSING_RELATIONSHIP: Cannot load "comment" for route "/posts/:post/comments/:>comment". Make sure to define it as a relationship on model "Post"'
     )
 
     await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
