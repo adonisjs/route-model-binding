@@ -98,6 +98,5 @@ export function getContextForRoute(app: Application, route: string, url: string)
   const matchingRoute = Route.match(url, 'GET')!
 
   const ctx = HttpContext.create(matchingRoute.route.pattern, matchingRoute.params)
-  ctx.route = matchingRoute.route
   return ctx
 }
