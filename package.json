@@ -1,5 +1,5 @@
 {
-  "name": "@adonisjs/route-model-binding",
+  "name": "@adonisjs-priv/route-model-binding",
   "version": "0.0.0",
   "description": "Route model binding for AdonisJS",
   "files": [
@@ -9,6 +9,7 @@
     "build/index.d.ts",
     "build/index.js"
   ],
+  "private": true,
   "main": "build/index.js",
   "types": "build/adonis-typings/index.d.ts",
   "scripts": {
