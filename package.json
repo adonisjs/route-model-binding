@@ -5,6 +5,7 @@
   "files": [
     "build/adonis-typings",
     "build/src",
+    "build/instructions.md",
     "build/providers",
     "build/index.d.ts",
     "build/index.js"
