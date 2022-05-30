@@ -72,11 +72,17 @@ export class ResourceLoader {
    * Returns the relationship name for a scoped resource
    */
   private getRelationshipName(param: Param, parentModel: LucidModel): string {
-    let relationshipName = string.camelCase(param.name)
+    /**
+     * Search relationship by singular name
+     */
+    let relationshipName = string.singularize(string.camelCase(param.name))
     if (parentModel.$hasRelation(relationshipName)) {
       return relationshipName
     }
 
+    /**
+     * Search relationship by plural name
+     */
     relationshipName = string.pluralize(relationshipName)
     if (parentModel.$hasRelation(relationshipName)) {
       return relationshipName
