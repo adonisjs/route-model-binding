@@ -8,11 +8,6 @@
  */
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { InvalidBindValueException } from '../exceptions/invalid_bind_value'
-
-function isPrimtiveConstructor(value: any): boolean {
-  return [String, Function, Object, Date, Number, Boolean].indexOf(value) > -1
-}
 
 /**
  * Automatically query Lucid models for the current HTTP
@@ -45,9 +40,9 @@ export function bind() {
           }
 
           return bindings.reduce(
-            (result: any[], binding: any, index: number) => {
+            (result: any[], _: any, index: number) => {
               const param = ctx.route!.meta.resolvedParams[index]
-              if (binding && param) {
+              if (param) {
                 result.push(ctx.resources[param.name])
               }
               return result
@@ -64,17 +59,6 @@ export function bind() {
        * The first method param is always the HTTP context
        */
       if (index !== 0) {
-        /**
-         * Disallow type hinting interfaces, types or any other type
-         */
-        if (isPrimtiveConstructor(param)) {
-          throw InvalidBindValueException.invoke(
-            param,
-            `${target.constructor.name}.${propertyKey}`,
-            index
-          )
-        }
-
         target.constructor.bindings[propertyKey].push(param)
       }
     })

@@ -54,6 +54,21 @@ export class ResourceLoader {
   constructor(public ctx: HttpContextContract) {}
 
   /**
+   * Returns true when value is a resource model
+   */
+  private isResourceModel(value: any): value is RouteModel {
+    if (!value) {
+      return false
+    }
+
+    return (
+      typeof value['findForRequest'] === 'function' ||
+      typeof value['findOrFail'] === 'function' ||
+      typeof value['findRelatedForRequest'] === 'function'
+    )
+  }
+
+  /**
    * Returns the relationship name for a scoped resource
    */
   private getRelationshipName(param: Param, parentModel: LucidModel): string {
@@ -155,7 +170,7 @@ export class ResourceLoader {
   /**
    * Load models based upon the current request route params
    */
-  public async load(models: (RouteModel | null)[]) {
+  public async load(models: any[]) {
     let index = 0
     if (!this.ctx.route!.meta.resolvedParams) {
       this.ctx.route!.meta.resolvedParams = new ParamsParser(
@@ -182,10 +197,14 @@ export class ResourceLoader {
        *     - Param is undefined when it is not and not defined
        *     - Param can be null when custom "cast" function sets it to null
        */
-      if (model && value !== undefined && value !== null) {
-        this.resources[param.name] = param.scoped
-          ? await this.instantiateScopedModel(model, param, value)
-          : await this.instantiateModel(model, param, value)
+      if (value !== undefined && value !== null) {
+        if (this.isResourceModel(model)) {
+          this.resources[param.name] = param.scoped
+            ? await this.instantiateScopedModel(model, param, value)
+            : await this.instantiateModel(model, param, value)
+        } else {
+          this.resources[param.name] = value
+        }
       }
 
       index++

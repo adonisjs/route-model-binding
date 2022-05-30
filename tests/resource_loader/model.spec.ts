@@ -316,7 +316,7 @@ test.group('Resource Loader', (group) => {
     assert.notProperty(loader.resources, 'comment')
   })
 
-  test('do not load resource for param with missing model', async ({ assert }) => {
+  test('disable model binding by setting param type to null', async ({ assert }) => {
     const app = await setup()
     await migrate(app.container.resolveBinding('Adonis/Lucid/Database'))
 
@@ -370,7 +370,8 @@ test.group('Resource Loader', (group) => {
 
     await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
 
-    assert.notProperty(loader.resources, 'post')
+    assert.property(loader.resources, 'post')
+    assert.equal(loader.resources.post, '1')
     assert.property(loader.resources, 'comment')
     assert.instanceOf(loader.resources.comment, Comment)
     assert.equal(loader.resources.comment.id, 1)
