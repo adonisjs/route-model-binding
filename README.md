@@ -124,9 +124,11 @@ In the following example, we query only published posts. Also, make sure that th
 ```ts
 class Post extends BaseModel {
   public static findForRequest(ctx, param, value) {
+    const lookupKey = param.lookupKey === '$primaryKey' ? 'id' : param.lookupKey
+
     return this
       .query()
-      .where(param.lookupKey, value)
+      .where(lookupKey, value)
       .whereNotNull('publishedAt')
       .firstOrFail()
   }
@@ -191,12 +193,13 @@ class Post extends BaseModel {
      * https://github.com/microsoft/TypeScript/issues/37778
      */
     const self = this as unknown as Post
+    const lookupKey = param.lookupKey === '$primaryKey' ? 'id' : param.lookupKey
 
     if (param.name === 'comment') {
       return self
       .related('comments')
       .query()
-      .where(param.lookupKey, value)
+      .where(lookupKey, value)
       .firstOrFail()
     }
   }
