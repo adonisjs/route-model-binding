@@ -15,8 +15,9 @@
     "pretest": "npm run lint",
     "test": "node -r @adonisjs/require-ts/build/register bin/test.ts",
     "clean": "del-cli build",
+    "copyfiles": "copyfiles \"instructions.md\" build",
     "compile": "npm run lint && npm run clean && tsc",
-    "build": "npm run compile",
+    "build": "npm run compile && npm run copyfiles",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
@@ -53,6 +54,7 @@
     "@poppinss/dev-utils": "^2.0.3",
     "@types/node": "^17.0.35",
     "commitizen": "^4.2.4",
+    "copyfiles": "^2.4.1",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^4.0.1",
     "eslint": "^8.16.0",
@@ -121,11 +123,21 @@
     "anyBranch": false
   },
   "dependencies": {
-    "@japa/api-client": "^1.3.1",
     "@poppinss/utils": "^4.0.4"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": "^5.8.3",
+    "@adonisjs/lucid": "^18.0.0"
   },
   "publishConfig": {
     "access": "public",
     "tag": "pre-prelease"
+  },
+  "adonisjs": {
+    "instructionsMd": "./build/instructions.md",
+    "types": "@adonisjs/route-model-binding/build/adonis-typings",
+    "providers": [
+      "@adonisjs/route-model-binding/build/providers/RmbProvider"
+    ]
   }
 }
