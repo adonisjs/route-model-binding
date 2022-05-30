@@ -385,8 +385,8 @@ test.group('Route model binding | middleware', (group) => {
     }
 
     class PostsController {
-      @bind([null, Post])
-      public show(_, __: Post) {}
+      @bind()
+      public show(_, __: null, ___: Post) {}
     }
 
     await Post.createMany([
@@ -414,6 +414,78 @@ test.group('Route model binding | middleware', (group) => {
       assert.instanceOf(ctx.resources.post, Post)
       assert.equal(ctx.resources.post.id, 2)
       assert.equal(ctx.resources.post.slug, 'hello-adonisjs')
+      const postController = app.container.make(app.container.use('PostsController'))
+      const injections = postController.getHandlerArguments(ctx)
+      assert.deepEqual(injections, [ctx, ctx.resources.post])
+    })
+
+    await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
+  })
+
+  test('ignore bindings which have no parameters in route', async ({ assert }) => {
+    const app = await setup()
+    await migrate(app.container.resolveBinding('Adonis/Lucid/Database'))
+
+    const { BaseModel, column, hasMany } = app.container.resolveBinding('Adonis/Lucid/Orm')
+
+    class Post extends BaseModel {
+      @column({ isPrimary: true })
+      public id: number
+
+      @column()
+      public title: string
+
+      @column()
+      public slug: string
+
+      @hasMany(() => Comment)
+      public comments: HasMany<typeof Comment>
+    }
+
+    class Comment extends BaseModel {
+      @column({ isPrimary: true })
+      public id: number
+
+      @column()
+      public postId: number
+
+      @column()
+      public title: string
+
+      @column()
+      public slug: string
+    }
+
+    class PostsController {
+      @bind()
+      public show(_, __: Post, ___: Comment) {}
+    }
+
+    await Post.createMany([
+      {
+        title: 'Hello world',
+        slug: 'hello-world',
+      },
+      {
+        title: 'Hello AdonisJS',
+        slug: 'hello-adonisjs',
+      },
+    ])
+
+    const ctx = getContextForRoute(app, 'posts/:post', 'posts/2')
+    ctx.route!.meta.resolvedHandler = {
+      type: 'binding',
+      namespace: 'PostsController',
+      method: 'show',
+    }
+
+    app.container.bind('PostsController', () => PostsController)
+    await new RouteModelBindingMiddleware(app).handle(ctx, async () => {
+      assert.property(ctx.resources, 'post')
+      assert.instanceOf(ctx.resources.post, Post)
+      assert.equal(ctx.resources.post.id, 2)
+      assert.equal(ctx.resources.post.slug, 'hello-adonisjs')
+
       const postController = app.container.make(app.container.use('PostsController'))
       const injections = postController.getHandlerArguments(ctx)
       assert.deepEqual(injections, [ctx, ctx.resources.post])

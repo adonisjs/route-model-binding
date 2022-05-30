@@ -8,8 +8,6 @@
  */
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
-import { RouteModel } from '../contracts'
 import { InvalidBindValueException } from '../exceptions/invalid_bind_value'
 
 function isPrimtiveConstructor(value: any): boolean {
@@ -21,9 +19,9 @@ function isPrimtiveConstructor(value: any): boolean {
  * request. The decorator is meant to work only
  * with controllers
  */
-export function bind(models?: (RouteModel | null)[]) {
+export function bind() {
   return function (target: any, propertyKey: string) {
-    const methodParams = models || Reflect.getMetadata('design:paramtypes', target, propertyKey)
+    const methodParams = Reflect.getMetadata('design:paramtypes', target, propertyKey)
 
     /**
      * Instantiate static bindings property on the controller class
@@ -48,8 +46,8 @@ export function bind(models?: (RouteModel | null)[]) {
 
           return bindings.reduce(
             (result: any[], binding: any, index: number) => {
-              if (binding !== null) {
-                const param = ctx.route!.meta.resolvedParams[index]
+              const param = ctx.route!.meta.resolvedParams[index]
+              if (binding && param) {
                 result.push(ctx.resources[param.name])
               }
               return result
@@ -65,7 +63,7 @@ export function bind(models?: (RouteModel | null)[]) {
       /**
        * The first method param is always the HTTP context
        */
-      if (models || index !== 0) {
+      if (index !== 0) {
         /**
          * Disallow type hinting interfaces, types or any other type
          */
