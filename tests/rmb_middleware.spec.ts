@@ -281,76 +281,7 @@ test.group('Route model binding | middleware', (group) => {
     await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
   })
 
-  test('use decorator to specify the models to bind', async ({ assert }) => {
-    const app = await setup()
-    await migrate(app.container.resolveBinding('Adonis/Lucid/Database'))
-
-    const { BaseModel, column, hasMany } = app.container.resolveBinding('Adonis/Lucid/Orm')
-
-    class Post extends BaseModel {
-      @column({ isPrimary: true })
-      public id: number
-
-      @column()
-      public title: string
-
-      @column()
-      public slug: string
-
-      @hasMany(() => Comment)
-      public comments: HasMany<typeof Comment>
-    }
-
-    class Comment extends BaseModel {
-      @column({ isPrimary: true })
-      public id: number
-
-      @column()
-      public postId: number
-
-      @column()
-      public title: string
-
-      @column()
-      public slug: string
-    }
-
-    class PostsController {
-      @bind([Post])
-      public show(_, __: Post) {}
-    }
-
-    await Post.createMany([
-      {
-        title: 'Hello world',
-        slug: 'hello-world',
-      },
-      {
-        title: 'Hello AdonisJS',
-        slug: 'hello-adonisjs',
-      },
-    ])
-
-    const ctx = getContextForRoute(app, 'posts/:post', 'posts/2')
-    ctx.route!.meta.resolvedHandler = {
-      type: 'binding',
-      namespace: 'PostsController',
-      method: 'show',
-    }
-
-    app.container.bind('PostsController', () => PostsController)
-
-    await new RouteModelBindingMiddleware(app).handle(ctx, async () => {
-      assert.property(ctx.resources, 'post')
-      assert.instanceOf(ctx.resources.post, Post)
-      assert.equal(ctx.resources.post.id, 2)
-      assert.equal(ctx.resources.post.slug, 'hello-adonisjs')
-    })
-
-    await rollback(app.container.resolveBinding('Adonis/Lucid/Database'))
-  })
-
-  test('use decorator to skip resource loading for certain parameters', async ({ assert }) => {
+  test('mark argument type as null to skip resource loading', async ({ assert }) => {
     const app = await setup()
     await migrate(app.container.resolveBinding('Adonis/Lucid/Database'))
 
