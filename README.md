@@ -229,3 +229,8 @@ class PostsController {
 ```
 
 Since the route params and the controller method arguments are matched in the same order they are defined, you will always have to type-hint all the parameters.
+
+<br />
+<hr>
+
+![](./sponsorkit/sponsors.png)
