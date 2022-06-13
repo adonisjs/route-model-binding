@@ -29,6 +29,8 @@ export default class PostsController {
 }
 ```
 
+> ▶️ : **Are you a visual learner**? Checkout [these screencasts](https://learn.adonisjs.com/series/route-model-binding/introduction) to learn about Route model binding, its setup and usage.
+
 ## Setup
 Install the package from the npm registry as follows.
 
