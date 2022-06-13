@@ -132,7 +132,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "tag": "pre-prelease"
+    "tag": "latest"
   },
   "adonisjs": {
     "instructionsMd": "./build/instructions.md",
