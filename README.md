@@ -235,4 +235,4 @@ Since the route params and the controller method arguments are matched in the sa
 <br />
 <hr>
 
-![](./sponsorkit/sponsors.png)
+![](https://cdn.jsdelivr.net/gh/thetutlage/static/sponsorkit/sponsors.png)
